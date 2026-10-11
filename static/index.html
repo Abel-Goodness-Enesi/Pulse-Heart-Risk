@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse: ten-year heart risk</title>
+<meta name="description" content="A logistic regression model trained on the Framingham Heart Study, scoring people live.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800;900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="bar">
+  <span class="mark">Pulse</span>
+  <span class="bar-note">Framingham Heart Study / logistic regression / threshold 0.15</span>
+</header>
+
+<main>
+  <section class="stage" aria-label="Live risk estimate">
+    <div class="result">
+      <p class="kicker">Ten years from now</p>
+      <h1>One hundred people with your numbers.</h1>
+      <div class="crowd-wrap">
+        <canvas id="crowd" role="img" aria-label="One hundred dots, lit in yellow for each person the model expects to develop heart disease"></canvas>
+        <div class="stamp" id="stamp" hidden></div>
+      </div>
+      <div class="big"><span id="pct">0</span><small>%</small></div>
+      <p class="lede" id="lede">Loading the model.</p>
+      <div class="chip" id="chip"></div>
+    </div>
+
+    <div class="controls" id="controls" aria-label="Inputs"></div>
+  </section>
+
+  <section class="why">
+    <div class="head">
+      <p class="kicker">Why this number</p>
+      <h2>Each input pulls the score up or down.</h2>
+      <p class="sub">Bars show how far each input moves the score away from an average person in the training data. Yellow raises risk. Blue lowers it.</p>
+    </div>
+    <div class="tug" id="tug"></div>
+  </section>
+
+  <section class="run">
+    <div class="head">
+      <p class="kicker">Live run</p>
+      <h2>Feed it 848 people it has never seen.</h2>
+      <p class="sub">Each person from the test set is sent to the model one at a time. The model scores them first, then the page reveals what actually happened to them.</p>
+    </div>
+    <div class="deck">
+      <div class="deck-ctl">
+        <button class="btn primary" id="go">Start</button>
+        <button class="btn" id="rst">Reset</button>
+        <div class="speed" role="group" aria-label="Speed">
+          <button class="btn sm" data-ms="1300" aria-pressed="true">1x</button>
+          <button class="btn sm" data-ms="260" aria-pressed="false">5x</button>
+          <button class="btn sm" data-ms="55" aria-pressed="false">25x</button>
+        </div>
+        <span class="count mono" id="count">Patient 0 of 0</span>
+      </div>
+      <div class="score">
+        <div><b id="tp">0</b><span>Caught</span></div>
+        <div><b id="fn">0</b><span>Missed</span></div>
+        <div><b id="fp">0</b><span>False alarms</span></div>
+        <div><b id="tn">0</b><span>Cleared</span></div>
+        <div class="wide"><b id="rec">–</b><span>Recall</span></div>
+        <div class="wide"><b id="prec">–</b><span>Precision</span></div>
+      </div>
+      <div class="tape" id="tape" aria-hidden="true"></div>
+      <div class="tape-key mono">
+        <span><i class="k hit"></i>caught</span><span><i class="k miss"></i>missed</span><span><i class="k fp"></i>false alarm</span><span><i class="k tn"></i>cleared</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="head"><p class="kicker">Read this part</p><h2>What this is and is not.</h2></div>
+    <div class="cols">
+      <p>The model is a logistic regression on 14 measurements from the Framingham Heart Study, about 4,240 people from one town in Massachusetts. On held-out data it scores a PR-AUC of 0.300 against 0.152 for guessing. At the 0.15 line it catches about 59% of people who go on to develop heart disease, and about 26% of the people it flags do.</p>
+      <p>"About N of 100" is the model's probability read as a count. Calibration was not tested, so treat it as a ranking aid, not a forecast. The data is small and local, and the model says nothing about causes. This is a learning project and not medical advice.</p>
+    </div>
+  </section>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>
