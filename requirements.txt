@@ -1,0 +1,9 @@
+flask==3.0.3
+gunicorn==22.0.0
+numpy
+pandas
+joblib
+# IMPORTANT: replace the next line with the exact version printed by
+#   import sklearn; print(sklearn.__version__)
+# in the notebook where you saved the model, e.g. scikit-learn==1.6.1
+scikit-learn
